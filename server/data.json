@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "image": "I am Img",
+    "name": "Gokul",
+    "email": "gokulselva105@gmail.com",
+    "phone": "9360892205",
+    "position": "Developer",
+    "gender": "Male",
+    "qualification": "Bsc",
+    "dob": "12/6/2001",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  },
+  {
+    "id": 2,
+    "image": "I am Img",
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "phone": "1234567890",
+    "position": "Manager",
+    "gender": "Male",
+    "qualification": "MBA",
+    "dob": "10/15/1990",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  },
+  {
+    "id": 3,
+    "image": "I am Img",
+    "name": "Jane Smith",
+    "email": "janesmith@example.com",
+    "phone": "0987654321",
+    "position": "Designer",
+    "gender": "Female",
+    "qualification": "BFA",
+    "dob": "5/22/1995",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  },
+  {
+    "id": 4,
+    "image": "I am Img",
+    "name": "Alice Johnson",
+    "email": "alicej@example.com",
+    "phone": "5555555555",
+    "position": "HR",
+    "gender": "Female",
+    "qualification": "MSc",
+    "dob": "3/18/1988",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  },
+  {
+    "id": 5,
+    "image": "I am Img",
+    "name": "Bob Brown",
+    "email": "bobbrown@example.com",
+    "phone": "7777777777",
+    "position": "Sales Executive",
+    "gender": "Male",
+    "qualification": "BBA",
+    "dob": "8/25/1992",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  },
+  {
+    "id": 6,
+    "image": "I am Img",
+    "name": "Charlie Davis",
+    "email": "charlied@example.com",
+    "phone": "9999999999",
+    "position": "Marketing Manager",
+    "gender": "Male",
+    "qualification": "MBA",
+    "dob": "11/2/1985",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  },
+  {
+    "id": 7,
+    "image": "I am Img",
+    "name": "Diana Evans",
+    "email": "dianae@example.com",
+    "phone": "8888888888",
+    "position": "Accountant",
+    "gender": "Female",
+    "qualification": "BCom",
+    "dob": "9/12/1991",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  },
+  {
+    "id": 8,
+    "image": "I am Img",
+    "name": "Eve Foster",
+    "email": "evef@example.com",
+    "phone": "6666666666",
+    "position": "Data Analyst",
+    "gender": "Female",
+    "qualification": "MSc",
+    "dob": "7/14/1994",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  },
+  {
+    "id": 9,
+    "image": "I am Img",
+    "name": "Frank Green",
+    "email": "frankg@example.com",
+    "phone": "4444444444",
+    "position": "Support Engineer",
+    "gender": "Male",
+    "qualification": "BTech",
+    "dob": "5/6/1993",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  },
+  {
+    "id": 10,
+    "image": "I am Img",
+    "name": "Grace Hill",
+    "email": "graceh@example.com",
+    "phone": "3333333333",
+    "position": "Project Manager",
+    "gender": "Female",
+    "qualification": "MBA",
+    "dob": "2/22/1989",
+    "actions": {
+      "edit": true,
+      "delete": true
+    }
+  }
+]
