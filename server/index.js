@@ -5,15 +5,12 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const Employee = require("./Employee");
-
 const app = express();
 const uri = `mongodb+srv://gokulselva105:DefaultPassword@cluster0.mg5aj.mongodb.net/DataList?retryWrites=true&w=majority&appName=Cluster0`;
 
 app.use(cors());
 app.use(express.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
-
-// Ensure the public directory exists
 const publicDir = path.join(__dirname, "public");
 if (!fs.existsSync(publicDir)) {
   fs.mkdirSync(publicDir);
@@ -94,10 +91,19 @@ app.put("/:id", upload.single("image"), async (req, res) => {
     res.status(500).send(err);
   }
 });
-
 app.delete("/:id", async (req, res) => {
   try {
+    const employee = await Employee.findById(req.params.id);
+
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+    if (employee.image && fs.existsSync(path.join(__dirname, employee.image))) {
+      fs.unlinkSync(path.join(__dirname, employee.image));
+    }
+
     await Employee.findByIdAndDelete(req.params.id);
+
     const employees = await Employee.find({});
     res.json(employees);
   } catch (err) {

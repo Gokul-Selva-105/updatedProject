@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/EmployeeList.css";
+import "bootstrap/dist/css/bootstrap.min.css"
 import axios from "axios";
 
 const EmployeeList = () => {
@@ -23,9 +24,15 @@ const EmployeeList = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:3000");
-        setFdata(response.data);
-        setFilteruser(response.data);
-        console.log("Data fetched:", response.data);
+        const processedData = response.data.map((item) => ({
+          ...item,
+          course: Array.isArray(item.course)
+            ? item.course
+            : JSON.parse(item.course || "[]"),
+        }));
+        setFdata(processedData);
+        setFilteruser(processedData);
+        console.log("Data fetched:", processedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -49,7 +56,6 @@ const EmployeeList = () => {
 
   const handleCreate = () => {
     setDataList({
-      // _id: "",
       image: "",
       name: "",
       email: "",
@@ -68,23 +74,17 @@ const EmployeeList = () => {
     setIsEdit(true);
     setIsOpen(true);
   };
-
-  // const handleChange = (e) => {
-  //   const { name, value, files } = e.target;
-  //   if (name === "image") {
-  //     setDataList((prevData) => ({ ...prevData, [name]: files[0] }));
-  //   } else {
-  //     setDataList((prevData) => ({ ...prevData, [name]: value }));
-  //   }
-  // };
   const handleChange = (e) => {
     const { name, value, files, type, checked } = e.target;
-    if (type === "checkbox") {
+    if (name === "course") {
       setDataList((prevData) => {
+        const currentCourses = Array.isArray(prevData.course)
+          ? prevData.course
+          : [];
         const updatedCourses = checked
-          ? [...prevData.course, value]
-          : prevData.course.filter((course) => course !== value);
-        return { ...prevData, [name]: updatedCourses };
+          ? [...currentCourses, value]
+          : currentCourses.filter((course) => course !== value);
+        return { ...prevData, course: updatedCourses };
       });
     } else if (name === "image") {
       setDataList((prevData) => ({ ...prevData, [name]: files[0] }));
@@ -96,9 +96,12 @@ const EmployeeList = () => {
   const handleSave = async () => {
     const formData = new FormData();
     for (const key in dataList) {
-      formData.append(key, dataList[key]);
+      if (key === "course") {
+        formData.append(key, JSON.stringify(dataList[key]));
+      } else {
+        formData.append(key, dataList[key]);
+      }
     }
-
     try {
       if (!isEdit) {
         await axios.post("http://localhost:3000", formData);
@@ -107,10 +110,16 @@ const EmployeeList = () => {
       }
 
       const response = await axios.get("http://localhost:3000");
-      setFdata(response.data);
-      setFilteruser(response.data);
+      const processedData = response.data.map((item) => ({
+        ...item,
+        course: Array.isArray(item.course)
+          ? item.course
+          : JSON.parse(item.course || "[]"),
+      }));
+      setFdata(processedData);
+      setFilteruser(processedData);
       setIsOpen(false);
-      console.log("Data saved:", response.data);
+      console.log("Data saved:", processedData);
     } catch (error) {
       console.error("Error saving data:", error);
     }
@@ -119,9 +128,9 @@ const EmployeeList = () => {
   return (
     <>
       <h1 className="empL">Employee List</h1>
-      <div className="lNave">
-        <p>Total Count: {fdata.length}</p>
-        <button className="createEm" onClick={handleCreate}>
+      <div className="lNave p-4 bg-dark">
+        <p className="text-light">Total Count: {fdata.length}</p>
+        <button className="btn btn-light" onClick={handleCreate}>
           Create Employee
         </button>
       </div>
@@ -134,25 +143,23 @@ const EmployeeList = () => {
         />
       </div>
       <div className="tableHolder">
-        <table>
+        <table className="table table-light table-striped">
           <thead>
             <tr>
-              {/* <th>Unique ID</th> */}
-              <th>Image</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Mobile No</th>
-              <th>Designation</th>
-              <th>Gender</th>
-              <th>Course</th>
-              <th>Create Date</th>
-              <th>Action</th>
+              <th className="col">Image</th>
+              <th className="col">Name</th>
+              <th className="col">Email</th>
+              <th className="col">Mobile No</th>
+              <th className="col">Designation</th>
+              <th className="col">Gender</th>
+              <th className="col">Course</th>
+              <th className="col">Create Date</th>
+              <th className="col">Action</th>
             </tr>
           </thead>
           <tbody>
             {filteruser.map((datas) => (
               <tr key={datas._id}>
-                {/* <td>{datas._id}</td> */}
                 <td>
                   <img
                     src={
@@ -162,16 +169,21 @@ const EmployeeList = () => {
                     alt={datas.name}
                   />
                 </td>
-                <td>{datas.name}</td>
+                <td className="fs-6 fw-bold">{datas.name}</td>
                 <td>{datas.email}</td>
                 <td>{datas.phone}</td>
                 <td>{datas.position}</td>
                 <td>{datas.gender}</td>
-                <td>{datas.course}</td>
+                <td>
+                  {Array.isArray(datas.course)
+                    ? datas.course.join(", ")
+                    : datas.course}
+                </td>
+
                 <td>{new Date(datas.dob).toLocaleDateString()}</td>
                 <td className="fbtns">
-                  <button onClick={() => handleEdit(datas)}>Edit</button>
-                  <button onClick={() => handleDelete(datas._id)}>
+                  <button className="m-2 px-4" onClick={() => handleEdit(datas)}>Edit</button>
+                  <button className="m-2 px-3" onClick={() => handleDelete(datas._id)}>
                     Delete
                   </button>
                 </td>
@@ -189,8 +201,9 @@ const EmployeeList = () => {
                 </span>
               </div>
               <div className="inputs">
-                <label htmlFor="image">Image (JPG, PNG)</label>
+                <label htmlFor="image text-danger">Image (JPG, PNG)</label>
                 <input
+                 className="btn btn-secondary"
                   type="file"
                   id="image"
                   name="image"
@@ -234,6 +247,8 @@ const EmployeeList = () => {
                   <option value="Developer">Developer</option>
                   <option value="Designer">Designer</option>
                 </select>
+                <span className="gender">
+                <span className="male">
                 <label htmlFor="male">Male</label>
                 <input
                   type="radio"
@@ -243,6 +258,8 @@ const EmployeeList = () => {
                   checked={dataList.gender === "male"}
                   onChange={handleChange}
                 />
+                </span>
+                <span className="femal">
                 <label htmlFor="female">Female</label>
                 <input
                   type="radio"
@@ -252,82 +269,45 @@ const EmployeeList = () => {
                   checked={dataList.gender === "female"}
                   onChange={handleChange}
                 />
-                {/* <label htmlFor="course">Select Course</label>
+                </span>
+                </span>
+                <label htmlFor="course" className="course">Select Course</label>
                 <div className="courseholder">
-                  <span>
+                  <span className="cb1">
                     <input
                       type="checkbox"
                       id="BCOM"
                       name="course"
                       value="B.Com"
-                      checked={dataList.course === "B.Com"}
+                      checked={dataList.course?.includes("B.Com")}
                       onChange={handleChange}
                     />
                     <label htmlFor="BCOM">B.Com</label>
-                    
                   </span>
-                  <span>
+                  <span className="cb2">
                     <input
                       type="checkbox"
                       id="BCA"
                       name="course"
                       value="BCA"
-                      checked={dataList.course === "BCA"}
+                      checked={dataList.course?.includes("BCA")}
                       onChange={handleChange}
                     />
                     <label htmlFor="BCA">BCA</label>
                   </span>
-                  <span>
+                  <span className="cb3">
                     <input
                       type="checkbox"
                       id="Bsc"
                       name="course"
-                      value="B.sc"
-                      checked={dataList.course === "B.sc"}
+                      value="B.Sc"
+                      checked={dataList.course?.includes("B.Sc")}
                       onChange={handleChange}
                     />
                     <label htmlFor="Bsc">B.Sc</label>
                   </span>
-                  
-                </div> */}
-                <label htmlFor="course">Select Course</label>
-<div className="courseholder">
-  <span>
-    <input
-      type="checkbox"
-      id="BCOM"
-      name="course"
-      value="B.Com"
-      checked={dataList.course.includes("B.Com")}
-      onChange={handleChange}
-    />
-    <label htmlFor="BCOM">B.Com</label>
-  </span>
-  <span>
-    <input
-      type="checkbox"
-      id="BCA"
-      name="course"
-      value="BCA"
-      checked={dataList.course.includes("BCA")}
-      onChange={handleChange}
-    />
-    <label htmlFor="BCA">BCA</label>
-  </span>
-  <span>
-    <input
-      type="checkbox"
-      id="Bsc"
-      name="course"
-      value="B.Sc"
-      checked={dataList.course.includes("B.Sc")}
-      onChange={handleChange}
-    />
-    <label htmlFor="Bsc">B.Sc</label>
-  </span>
-</div>
+                </div>
 
-              
                 <label htmlFor="dob">Date of Birth</label>
                 <input
                   type="date"
@@ -335,6 +315,7 @@ const EmployeeList = () => {
                   name="dob"
                   value={dataList.dob}
                   onChange={handleChange}
+                  className="dataInp"
                 />
                 <button className="saveBtn" onClick={handleSave}>
                   Save

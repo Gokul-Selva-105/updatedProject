@@ -9,8 +9,6 @@
 .navbar-links {
     display: flex;
     width: 250px;
-    /* flex-direction: column; */
-    /* column-gap: 50px; */
     justify-content: space-around;
 }
 
@@ -39,18 +37,5 @@
     top: 5px;
     width: 50px;
     filter: drop-shadow(#f37a009a 0px 0px 5px);
-    /* transition: all 0.5s ease-in-out; */
   }
-  /* .companyLogo:hover {
-    animation: rotation 0.5s linear;
-    width: 68px;
-  } */
-  /* @keyframes rotation {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  } */
   
